@@ -2,11 +2,13 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 
+app.set("port", process.env.PORT || 4000);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 app.use(require("../src/routes/index.routes"));
 
-app.listen(4000, () => {
-    console.log("port :>> ", 4000);
+app.listen(app.get("port"), () => {
+    console.log("port :>> ", app.get("port"));
 });
