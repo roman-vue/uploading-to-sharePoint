@@ -1,3 +1,4 @@
+const envi = require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
@@ -10,5 +11,5 @@ app.use(morgan("dev"));
 app.use(require("../src/routes/index.routes"));
 
 app.listen(app.get("port"), () => {
-    console.log("port :>> ", app.get("port"));
+    console.log("port :>> ", `${app.get("port")} ${process.env.HEY}`);
 });

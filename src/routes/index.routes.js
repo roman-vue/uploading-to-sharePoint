@@ -3,28 +3,32 @@ const router = express.Router();
 const fs = require("fs");
 const spsave = require("spsave").spsave;
 
-router.post("/save", async (req, res, next) => {
+router.post("/save-document/:year/:mounth/:admition/:nameDocument/", async (req, res, next) => {
+    let path = `${req.params.year}/${req.params.mounth}/${req.params.admition}`;
+    let buff = fs.readFileSync("filename.pdf");
+
     const creds = {
-        username: "rjcalderin3@misena.edu.co",
-        password: "R1127572283Roman",
+        username: process.env.USER,
+        password: process.env.PASS,
     };
 
     const fileOpts = {
-        folder: "pacientes/PACIENTES",
-        fileName: "filename.pdf",
-        fileContent: fs.readFileSync("filename.pdf"),
+        folder: `pacientes/${path}`,
+        fileName: `${req.params.nameDocument}.pdf`,
+        fileContent: buff,
     };
 
     const coreOpts = {
-        siteUrl: `https://misenaeduco.sharepoint.com/sites/onecliclk`,
+        siteUrl: process.env.SITEURL,
     };
 
     spsave(coreOpts, creds, fileOpts)
-        .then(function (data) {
-            console.log("File uploaded!");
+        .then(() => {
+            res.status(200).json({ msg: `File Upload` });
         })
-        .catch(function (err) {
-            console.log("Error occurred");
+        .catch((err) => {
+            console.log("Error occurred", err.message);
+            res.status(403).json({ error: err.message });
         });
 });
 
